@@ -1,0 +1,71 @@
+********Installing and activated UFW via sudo********
+
+- sudo apt install ufw
+
+Verify whether ufw was successfully installed
+
+- dpkg -l | grep ufw
+
+Enable Firewall 
+
+-sudo ufw enable
+
+Allow connections Port 4242 
+
+- sudo ufw allow 4242
+
+Check UFW status
+
+- sudo ufw status
+
+********install SSH and connect it*******
+- sudo apt install openssh-server
+
+Setup the ssh at port 4242 
+
+- sudo vi /etc/ssh/ssd_config after this change the port 22 to 4242
+ Check the ssh status
+
+- sudo service ssh status
+
+
+************Adding User to sudo Group *************
+
+- adduser user sudo
+
+Now the added to sudo group
+
+- getent group sudo
+
+
+*************Setting Up a Strong Password Policy*******
+
+Add password age
+
+- sudo vi /etc/login.defs after we go to PASS_MAX_DAYS   99999 then PASS_MAX_DAYS   30 then PASS_MIN_DAYS   0 , PASS_MIN_DAYS   2, PASS_WARN_AGE   7
+
+Strong Password
+
+Secondly, to set up policies in relation to password strength, install the libpam-pwquality package.
+
+-sudo apt install libpam-pwquality
+
+Configure password strength policy via
+
+-sudo vi /etc/pam.d/common-password and after we add password        requisite                       pam_pwquality.so retry=3 and To set password minimum length to 10 characters minlen=10, 
+
+To require password to contain at least an uppercase character and a numeric character:
+
+ucredit=-1 dcredit=-1 , To set a maximum of 3 consecutive identical characters:
+
+maxrepeat=3
+To reject the password if it contains <username> in some form:
+
+reject_username To set the number of changes required in the new password from the old password to 7:
+
+difok=7
+To implement the same policy on root:
+
+enforce_for_root 
+Finally we need it like this :
+password        requisite                       pam_pwquality.so retry=3 minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
